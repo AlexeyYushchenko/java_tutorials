@@ -20,21 +20,21 @@ public class MainGreedy {
 
         while (!indexes.isEmpty()) {
             int maxValue = prices[indexes.get(0)];
-            int maxIndex = indexes.get(0);
+            int maxIndex = 0;
 
             for (int i = 1; i < indexes.size(); i++) {
                 if (maxValue < prices[indexes.get(i)]) {
                     maxValue = prices[indexes.get(i)];
-                    maxIndex = indexes.get(i);
+                    maxIndex = i;
                 }
             }
 
-            resultWeight += weights[maxIndex];
-            if (resultWeight > maxWeight) {
-                break;
+            if (maxWeight - resultWeight >= weights[indexes.get(maxIndex)]) { //добавляем позицию, только если есть свободное место для неё.
+                resultWeight += weights[indexes.get(maxIndex)];
+                result.add(indexes.get(maxIndex));
+                if (resultWeight == maxWeight) break; //если ничего нельзя добавить, прерываем цикл.
             }
 
-            result.add(maxIndex);
             indexes.remove(maxIndex);
         }
 
@@ -42,5 +42,7 @@ public class MainGreedy {
         for (Integer integer : result) {
             System.out.println(integer + 1);
         }
+        System.out.println("total weight: " + resultWeight);
+        System.out.println("total backpack value: " + result.stream().mapToInt(x -> prices[x]).sum());
     }
 }
